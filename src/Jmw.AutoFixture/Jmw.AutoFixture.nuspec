@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Jmw.AutoFixture</id>
+    <version>1.0.0</version>
+    <description>
+      Some tools to simplify Fixtures and Mocks in Unit Tests using AutoFixture.
+    </description>
+    <tags>Unittest AutoFixture Moq</tags>
+    <projectUrl>https://github.com/jmw-fr/Jmw.AutoFixture</projectUrl>
+    <authors>Jean-Marc Weeger</authors>
+    <license type="expression">MIT</license>
+    <dependencies>
+      <dependency id="AutoFixture" version="4.8.0" />
+      <dependency id="Moq" version="4.10.1" />
+    </dependencies>
+  </metadata>
+</package>
