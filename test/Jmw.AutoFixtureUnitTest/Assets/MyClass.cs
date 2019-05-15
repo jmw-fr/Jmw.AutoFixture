@@ -30,6 +30,8 @@ namespace Jmw.AutoFixture.Test
         /// <returns>Some result.</returns>
         public async Task<string> GetResultAsync(string param)
         {
+            await repository.UpdateSomeDataAsync(Guid.NewGuid(), param);
+
             return await repository.GetSomeDataAsync(param);
         }
     }

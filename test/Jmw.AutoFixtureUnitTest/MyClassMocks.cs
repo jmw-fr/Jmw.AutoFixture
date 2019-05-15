@@ -4,6 +4,8 @@
 
 namespace Jmw.AutoFixture.Test
 {
+    using System;
+    using System.Threading.Tasks;
     using Moq;
 
     /// <summary>
@@ -41,25 +43,27 @@ namespace Jmw.AutoFixture.Test
             {
                 case TestType.Nominal:
                     {
-                        CreateMock<IRepository>(true)
-                            .Setup(m => m.GetSomeDataAsync(It.Is<string>(p => p == Param)))
-                            .ReturnsAsync(ExpectedResult);
+                        CreateMock<IRepository>(
+                            true,
+                            m => m.Setup(f => f.UpdateSomeDataAsync(It.IsAny<Guid>(), It.IsAny<string>())).Returns(Task.CompletedTask),
+                            m => m.Setup(f => f.GetSomeDataAsync(It.Is<string>(p => p == Param))).ReturnsAsync(ExpectedResult));
 
                         break;
                     }
 
                 case TestType.ThrowException:
                     {
-                        CreateMock<IRepository>(true)
-                            .Setup(m => m.GetSomeDataAsync(It.Is<string>(p => p == Param)))
-                            .Throws(new System.InvalidOperationException());
+                        CreateMock<IRepository>(
+                            true,
+                            m => m.Setup(f => f.UpdateSomeDataAsync(It.IsAny<Guid>(), It.IsAny<string>())).Returns(Task.CompletedTask),
+                            m => m.Setup(f => f.GetSomeDataAsync(It.Is<string>(p => p == Param))).Throws(new InvalidOperationException()));
 
                         break;
                     }
 
                 default:
                     {
-                        throw new System.ArgumentException(nameof(typeTest));
+                        throw new ArgumentException(nameof(typeTest));
                     }
             }
         }

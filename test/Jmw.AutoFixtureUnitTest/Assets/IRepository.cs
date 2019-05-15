@@ -4,6 +4,7 @@
 
 namespace Jmw.AutoFixture.Test
 {
+    using System;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -17,5 +18,13 @@ namespace Jmw.AutoFixture.Test
         /// <param name="param">Some parameter.</param>
         /// <returns>Some result from mock.</returns>
         Task<string> GetSomeDataAsync(string param);
+
+        /// <summary>
+        /// Update data sample function.
+        /// </summary>
+        /// <param name="id">Some Id.</param>
+        /// <param name="data">Some data.</param>
+        /// <returns>Task.</returns>
+        Task UpdateSomeDataAsync(Guid id, string data);
     }
 }

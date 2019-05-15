@@ -7,6 +7,7 @@ namespace Jmw.AutoFixture
     using System.Collections.Generic;
     using System.Reflection;
     using global::AutoFixture;
+    using global::AutoFixture.Dsl;
     using Moq;
 
     /// <summary>
@@ -76,28 +77,37 @@ namespace Jmw.AutoFixture
         /// <summary>
         /// Creates a new fixture using AutoFixture.
         /// </summary>
+        /// <param name="setupAction">Setup action of the fixture.</param>
         /// <typeparam name="T">Type of the fixture to create.</typeparam>
         /// <returns>Created fixture.</returns>
-        public T CreateFixture<T>()
+        public T CreateFixture<T>(System.Func<IPostprocessComposer<T>, IPostprocessComposer<T>> setupAction = null)
         {
-            return Fixture.Create<T>();
+            return CreateFixture(false, setupAction);
         }
 
         /// <summary>
         /// Creates a new fixture using AutoFixture.
         /// </summary>
         /// <param name="freeze">Create a freezed fixture.</param>
+        /// <param name="setupAction">Setup action of the fixture.</param>
         /// <typeparam name="T">Type of the fixture to create.</typeparam>
         /// <returns>Created fixture.</returns>
-        public T CreateFixture<T>(bool freeze)
+        public T CreateFixture<T>(bool freeze, System.Func<IPostprocessComposer<T>, IPostprocessComposer<T>> setupAction = null)
         {
+            IPostprocessComposer<T> b = Fixture.Build<T>();
+
+            if (setupAction != null)
+            {
+                b = setupAction?.Invoke(b);
+            }
+
             if (freeze)
             {
                 return Fixture.Freeze<T>();
             }
             else
             {
-                return Fixture.Create<T>();
+                return b.Create();
             }
         }
 
