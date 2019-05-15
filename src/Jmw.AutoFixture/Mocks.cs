@@ -94,20 +94,31 @@ namespace Jmw.AutoFixture
         /// <returns>Created fixture.</returns>
         public T CreateFixture<T>(bool freeze, System.Func<IPostprocessComposer<T>, IPostprocessComposer<T>> setupAction = null)
         {
-            IPostprocessComposer<T> b = Fixture.Build<T>();
-
-            if (setupAction != null)
-            {
-                b = setupAction?.Invoke(b);
-            }
-
             if (freeze)
             {
-                return Fixture.Freeze<T>();
+                if (setupAction != null)
+                {
+                    return Fixture.Freeze<T>(f => setupAction.Invoke(f));
+                }
+                else
+                {
+                    return Fixture.Freeze<T>();
+                }
             }
             else
             {
-                return b.Create();
+                if (setupAction != null)
+                {
+                    IPostprocessComposer<T> b = Fixture.Build<T>();
+
+                    b = setupAction?.Invoke(b);
+
+                    return b.Create();
+                }
+                else
+                {
+                    return Fixture.Create<T>();
+                }
             }
         }
 

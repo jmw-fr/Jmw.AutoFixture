@@ -5,6 +5,7 @@
 namespace Jmw.AutoFixture.Test
 {
     using global::AutoFixture;
+    using Jmw.AutoFixtureUnitTest.Assets;
     using Xunit;
 
     /// <summary>
@@ -52,6 +53,46 @@ namespace Jmw.AutoFixture.Test
             // Assert
             Assert.NotNull(ex);
             Assert.Equal(expectedException, ex.GetType());
+        }
+
+        /// <summary>
+        /// Test that <c>CreateFixture</c>
+        /// freezes the fixture.
+        /// </summary>
+        [Fact]
+        [Trait("CreateFixture", nameof(MyClass))]
+        public void Mocks_Must_Freeze()
+        {
+            // Arrange
+            var moq = new MyClassMocks(TestType.Nominal);
+
+            // Act
+            var frozen = moq.CreateFixture<string>(true);
+            var result = moq.CreateFixture<string>();
+
+            // Act
+            Assert.Same(frozen, result);
+
+            // Assert
+        }
+
+        /// <summary>
+        /// Test that <c>CreateFixture</c>
+        /// freezes the fixture.
+        /// </summary>
+        [Fact]
+        [Trait("CreateFixture", nameof(MyClass))]
+        public void Mocks_Must_Freeze_WithBuild()
+        {
+            // Arrange
+            var moq = new MyClassMocks(TestType.Nominal);
+
+            // Act
+            var frozen = moq.CreateFixture<MyData>(true, f => f.With(s => s.SomeProperty, "123"));
+            var result = moq.CreateFixture<MyData>();
+
+            // Assert
+            Assert.Same(frozen, result);
         }
     }
 }
