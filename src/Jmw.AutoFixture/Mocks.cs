@@ -84,11 +84,29 @@ namespace Jmw.AutoFixture
         }
 
         /// <summary>
-        /// Setup a Moq mock instance.
+        /// Creates a new fixture using AutoFixture.
+        /// </summary>
+        /// <param name="freeze">Create a freezed fixture.</param>
+        /// <typeparam name="T">Type of the fixture to create.</typeparam>
+        /// <returns>Created fixture.</returns>
+        public T CreateFixture<T>(bool freeze)
+        {
+            if (freeze)
+            {
+                return Fixture.Freeze<T>();
+            }
+            else
+            {
+                return Fixture.Create<T>();
+            }
+        }
+
+        /// <summary>
+        /// Setup a Moq instance.
         /// </summary>
         /// <typeparam name="T">Mocked type.</typeparam>
         /// <param name="strict">If <c>true</c>, setup the strict mode of Moq.</param>
-        /// <returns>Instance of the mock.</returns>
+        /// <returns>Instance of <see cref="Mock{T}"/>.</returns>
         /// <remarks>
         /// <para>I don't rely on Autofixture.AutoMoq to setup the Mock instance.</para>
         /// <para>I prefer to create the Mock with the strict behavior and inject it inside AutoFixture.</para>
@@ -106,6 +124,26 @@ namespace Jmw.AutoFixture
             Fixture.Inject(mock.Object);
 
             mocks.Add(typeof(T), mock);
+
+            return mock;
+        }
+
+        /// <summary>
+        /// Setup a Moq instance and calls setup Actions.
+        /// </summary>
+        /// <typeparam name="T">Mocked type.</typeparam>
+        /// <param name="strict">If <c>true</c>, setup the strict mode of Moq.</param>
+        /// <param name="setupActions">List of actions to execute after mock creation.</param>
+        /// <returns>Instance of <see cref="Mock{T}"/>.</returns>
+        protected Mock<T> CreateMock<T>(bool strict, params System.Action<Mock<T>>[] setupActions)
+            where T : class
+        {
+            var mock = CreateMock<T>(true);
+
+            foreach (var action in setupActions)
+            {
+                action?.Invoke(mock);
+            }
 
             return mock;
         }
