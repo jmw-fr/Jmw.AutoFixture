@@ -111,7 +111,7 @@ namespace Jmw.AutoFixture
                 {
                     IPostprocessComposer<T> b = Fixture.Build<T>();
 
-                    b = setupAction?.Invoke(b);
+                    b = setupAction.Invoke(b);
 
                     return b.Create();
                 }
@@ -119,6 +119,51 @@ namespace Jmw.AutoFixture
                 {
                     return Fixture.Create<T>();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Creates many fixture using AutoFixture.
+        /// </summary>
+        /// <param name="setupAction">Setup action of the fixture.</param>
+        /// <typeparam name="T">Type of the fixture to create.</typeparam>
+        /// <returns>Created fixture.</returns>
+        public IEnumerable<T> CreateManyFixtures<T>(System.Func<IPostprocessComposer<T>, IPostprocessComposer<T>> setupAction = null)
+        {
+            if (setupAction != null)
+            {
+                IPostprocessComposer<T> b = Fixture.Build<T>();
+
+                b = setupAction.Invoke(b);
+
+                return b.CreateMany();
+            }
+            else
+            {
+                return Fixture.CreateMany<T>();
+            }
+        }
+
+        /// <summary>
+        /// Creates many fixture using AutoFixture.
+        /// </summary>
+        /// <param name="count">The number of objects to create.</param>
+        /// <param name="setupAction">Setup action of the fixture.</param>
+        /// <typeparam name="T">Type of the fixture to create.</typeparam>
+        /// <returns>Created fixture.</returns>
+        public IEnumerable<T> CreateManyFixtures<T>(int count, System.Func<IPostprocessComposer<T>, IPostprocessComposer<T>> setupAction = null)
+        {
+            if (setupAction != null)
+            {
+                IPostprocessComposer<T> b = Fixture.Build<T>();
+
+                b = setupAction.Invoke(b);
+
+                return b.CreateMany(count);
+            }
+            else
+            {
+                return Fixture.CreateMany<T>(count);
             }
         }
 
@@ -167,6 +212,18 @@ namespace Jmw.AutoFixture
             }
 
             return mock;
+        }
+
+        /// <summary>
+        /// Registers a class as the interface type.
+        /// </summary>
+        /// <typeparam name="TInterface">Type of the interface.</typeparam>
+        /// <typeparam name="TClass">Type of the class implementing the class.</typeparam>
+        protected void RegisterInterface<TInterface, TClass>()
+            where TInterface : class
+            where TClass : class
+        {
+            Fixture.RegisterInterface<TInterface, TClass>();
         }
     }
 }

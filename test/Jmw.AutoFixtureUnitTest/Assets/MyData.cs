@@ -7,11 +7,9 @@ namespace Jmw.AutoFixtureUnitTest.Assets
     /// <summary>
     /// Sample data class.
     /// </summary>
-    public class MyData
+    public class MyData : IMyData
     {
-        /// <summary>
-        /// Gets or sets some sample property.
-        /// </summary>
+        /// <inheritdoc />
         public string SomeProperty { get; set; }
     }
 }

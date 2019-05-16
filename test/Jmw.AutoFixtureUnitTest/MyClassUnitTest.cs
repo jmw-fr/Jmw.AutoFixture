@@ -4,6 +4,7 @@
 
 namespace Jmw.AutoFixture.Test
 {
+    using System.Linq;
     using global::AutoFixture;
     using Jmw.AutoFixtureUnitTest.Assets;
     using Xunit;
@@ -93,6 +94,82 @@ namespace Jmw.AutoFixture.Test
 
             // Assert
             Assert.Same(frozen, result);
+        }
+
+        /// <summary>
+        /// Test that <c>CreateManyFixtures</c>
+        /// correctly creates fixtures.
+        /// </summary>
+        [Fact]
+        [Trait("CreateManyFixtures", nameof(MyClass))]
+        public void Mocks_Must_CreateManyFixtures()
+        {
+            // Arrange
+            var moq = new MyClassMocks(TestType.Nominal);
+
+            // Act
+            var result = moq.CreateManyFixtures<MyData>();
+
+            // Assert
+            Assert.NotEmpty(result);
+        }
+
+        /// <summary>
+        /// Test that <c>CreateManyFixtures</c>
+        /// correctly creates fixtures.
+        /// </summary>
+        [Fact]
+        [Trait("CreateManyFixtures", nameof(MyClass))]
+        public void Mocks_Must_CreateManyFixtures_Setup()
+        {
+            // Arrange
+            var moq = new MyClassMocks(TestType.Nominal);
+
+            // Act
+            var result = moq.CreateManyFixtures<MyData>(f => f.With(d => d.SomeProperty, "123"));
+
+            // Assert
+            Assert.NotEmpty(result);
+            Assert.All(result, r => Assert.Equal("123", r.SomeProperty));
+        }
+
+        /// <summary>
+        /// Test that <c>CreateManyFixtures</c>
+        /// correctly creates fixtures.
+        /// </summary>
+        [Fact]
+        [Trait("CreateManyFixtures", nameof(MyClass))]
+        public void Mocks_Must_CreateManyFixtures_WithCount()
+        {
+            // Arrange
+            var moq = new MyClassMocks(TestType.Nominal);
+
+            // Act
+            var result = moq.CreateManyFixtures<MyData>(2);
+
+            // Assert
+            Assert.NotEmpty(result);
+            Assert.Equal(2, result.Count());
+        }
+
+        /// <summary>
+        /// Test that <c>CreateManyFixtures</c>
+        /// correctly creates fixtures.
+        /// </summary>
+        [Fact]
+        [Trait("CreateManyFixtures", nameof(MyClass))]
+        public void Mocks_Must_CreateManyFixtures_WithCountAndSetup()
+        {
+            // Arrange
+            var moq = new MyClassMocks(TestType.Nominal);
+
+            // Act
+            var result = moq.CreateManyFixtures<MyData>(2, f => f.With(d => d.SomeProperty, "123"));
+
+            // Assert
+            Assert.NotEmpty(result);
+            Assert.Equal(2, result.Count());
+            Assert.All(result, r => Assert.Equal("123", r.SomeProperty));
         }
     }
 }

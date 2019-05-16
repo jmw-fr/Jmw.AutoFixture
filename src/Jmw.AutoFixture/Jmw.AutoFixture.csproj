@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/jmw-fr/Jmw.AutoFixture</RepositoryUrl>
     <PackageTags>Unittest AutoFixture Moq</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.2</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
